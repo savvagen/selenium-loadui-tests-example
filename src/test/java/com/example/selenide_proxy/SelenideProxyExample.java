@@ -12,6 +12,7 @@ import java.io.IOException;
 
 
 import static com.codeborne.selenide.Selenide.executeJavaScript;
+import static com.codeborne.selenide.Selenide.open;
 import static com.codeborne.selenide.WebDriverRunner.*;
 
 public class SelenideProxyExample {
@@ -20,22 +21,25 @@ public class SelenideProxyExample {
 
     @BeforeAll
     public static void setup() {
-        Configuration.baseUrl = "http://google.com";
+        Configuration.baseUrl = "https://react-redux.realworld.io";
         Configuration.proxyEnabled = true;
         //Configuration.proxyPort = 4444;
         //Configuration.proxyHost = "127.0.0.1";
+        open();
 
         SelenideProxyServer proxy = getSelenideProxy();
+        proxy.getProxy().setChainedProxyHTTPS(true);
         proxy.getProxy().enableHarCaptureTypes(CaptureType.getAllContentCaptureTypes());
 
-        /*proxy.addRequestFilter("display.all.requests", (request, contents, messageInfo) -> {
+        proxy.addRequestFilter("display.all.requests", (request, contents, messageInfo) -> {
             System.out.println(request.getUri());
             return null;
         });
 
-        proxy.addResponseFilter("my.response.filter", (response, contents, messageInfo) -> {
-            if (messageInfo.getOriginalUrl().endsWith("api/tags")){
-                System.out.println(contents.getContentType());
+        /*proxy.addResponseFilter("my.response.filter", (response, contents, messageInfo) -> {
+            if (messageInfo.getUrl().startsWith("http")){
+                String url = messageInfo.getUrl();
+                System.out.println(url + "\n\n" + contents.getTextContents());
             }
         });*/
     }
@@ -43,7 +47,7 @@ public class SelenideProxyExample {
     @Test
     public void shouldOpenSearchPage() throws IOException {
         Selenide.open("/");
-        HarWriter.writeHAR(new File("hars/google.har"), getSelenideProxy().getProxy().getHar().getLog());
+        HarWriter.writeHAR(new File("hars/test.har"), getSelenideProxy().getProxy().getHar().getLog());
     }
 
 
