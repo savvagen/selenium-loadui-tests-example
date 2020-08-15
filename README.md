@@ -1,4 +1,4 @@
-# Example of how to use Proxy for performance tests using Selenium (Selenide)
+# Use Proxy for UI performance tests with Selenium(Selenide)
 
 ## Using Native Selenide Proxy:
 ``` 
